@@ -29,7 +29,7 @@ class Ui_Main_Window(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Voting Terminal"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Main Menu"))
         self.vote_option_button.setText(_translate("MainWindow", "Vote"))
         self.exit_option_button.setText(_translate("MainWindow", "Exit to Results"))
         self.welcome_label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:9pt;\">Welcome, choose an action...</span></p></body></html>"))
