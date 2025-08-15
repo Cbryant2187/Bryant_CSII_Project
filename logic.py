@@ -10,10 +10,13 @@ class MainMenu(QMainWindow, Ui_Main_Window):
         method to create main menu with options to vote or view results
         """
         super().__init__()
-        self.main_menu = MainMenu
         self.voting_window = None
         self.setupUi(self)
         self.voterid_list = []
+        self.can1_total = 0
+        self.can2_total = 0
+        self.can3_total = 0
+        self.custom_can_total = 0
 
         self.exit_option_button.clicked.connect(self.open_results_window)
         self.vote_option_button.clicked.connect(self.open_voting_window)
@@ -52,7 +55,7 @@ class VotingWindow(QMainWindow, Ui_input_voting_terminal):
     def custom_input_box_visibility(self, status: bool) -> None:
         """
         method to change input box visibility
-        :param checked: boolean value representing visibility
+        :param status: boolean value representing visibility
         """
         self.custom_input.setVisible(status)
 
@@ -160,6 +163,30 @@ class ResultsWindow(QMainWindow, Ui_results_window):
         super().__init__()
         self.main_menu = main_menu
         self.setupUi(self)
-
         self.results_exit_button.clicked.connect(self.close)
+        
+        self.can1_total = main_menu.can1_total
+        self.can2_total = main_menu.can2_total
+        self.can3_total = main_menu.can3_total
+        self.custom_can_total = main_menu.custom_can_total
+
+        #vote_percent1 = self.can1_total / (self.can2_total + self.can3_total + self.custum_can_total)
+        #vote_percent2 = self.can2_total / (self.can3_total + self.can1_total + custum_can_total)
+        #vote_percent3 = self.can3_total / (self.can1_total + self.can2_total + custum_can_total)
+        #custom_can_percent = self.custom_can_total / (self.can1_total + self.can2_total + self.can3_total)
+
+
+        #self.can1_result.setText(f"Bianca received {self.can1_total} : {vote_percent1}")
+        #self.can2_result.setText(f"Jack received {self.can1_total} : {vote_percent2}")
+        #self.can3_result.setText(f"Nichole received {self.can1_total} : {vote_percent3}")
+        #self.can4_result.setText(f"{custom_candiate} recieved ")
+
+        self.can1_result.setText("Bianca received {self.can1_total} : {vote_percent1}")
+        self.can2_result.setText("Jack received {self.can1_total} : {vote_percent2}")
+        self.can3_result.setText("Nichole received {self.can1_total} : {vote_percent3}")
+        self.can4_result.setText("{custom_candidate} received ")
+
+        self.overall_results_label.setText("{Candidate} Wins")
+
+
 
