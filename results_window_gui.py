@@ -1,0 +1,52 @@
+from PyQt6 import QtCore, QtWidgets
+
+
+class Ui_results_window(object):
+    def setupUi(self, results_window):
+        results_window.setObjectName("results_window")
+        results_window.resize(254, 320)
+        self.centralwidget = QtWidgets.QWidget(parent=results_window)
+        self.centralwidget.setObjectName("centralwidget")
+        self.results_exit_button = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.results_exit_button.setGeometry(QtCore.QRect(70, 240, 121, 31))
+        self.results_exit_button.setObjectName("results_exit_button")
+        self.can1_result = QtWidgets.QLabel(parent=self.centralwidget)
+        self.can1_result.setGeometry(QtCore.QRect(30, 20, 171, 16))
+        self.can1_result.setObjectName("can1_result")
+        self.can2_result = QtWidgets.QLabel(parent=self.centralwidget)
+        self.can2_result.setGeometry(QtCore.QRect(30, 40, 181, 21))
+        self.can2_result.setObjectName("can2_result")
+        self.can3_result = QtWidgets.QLabel(parent=self.centralwidget)
+        self.can3_result.setGeometry(QtCore.QRect(30, 59, 181, 31))
+        self.can3_result.setObjectName("can3_result")
+        self.can4_result = QtWidgets.QLabel(parent=self.centralwidget)
+        self.can4_result.setGeometry(QtCore.QRect(30, 90, 181, 20))
+        self.can4_result.setObjectName("can4_result")
+        self.overall_results_label = QtWidgets.QLabel(parent=self.centralwidget)
+        self.overall_results_label.setGeometry(QtCore.QRect(54, 149, 131, 61))
+        self.overall_results_label.setObjectName("overall_results_label")
+        self.can5_result = QtWidgets.QLabel(parent=self.centralwidget)
+        self.can5_result.setGeometry(QtCore.QRect(30, 120, 35, 10))
+        self.can5_result.setObjectName("can5_result")
+        results_window.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(parent=results_window)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 254, 18))
+        self.menubar.setObjectName("menubar")
+        results_window.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(parent=results_window)
+        self.statusbar.setObjectName("statusbar")
+        results_window.setStatusBar(self.statusbar)
+
+        self.retranslateUi(results_window)
+        QtCore.QMetaObject.connectSlotsByName(results_window)
+
+    def retranslateUi(self, results_window):
+        _translate = QtCore.QCoreApplication.translate
+        results_window.setWindowTitle(_translate("results_window", "Results"))
+        self.results_exit_button.setText(_translate("results_window", "Exit"))
+        self.can1_result.setText(_translate("results_window", "TextLabel"))
+        self.can2_result.setText(_translate("results_window", "TextLabel"))
+        self.can3_result.setText(_translate("results_window", "TextLabel"))
+        self.can4_result.setText(_translate("results_window", "TextLabel"))
+        self.overall_results_label.setText(_translate("results_window", "TextLabel"))
+        self.can5_result.setText(_translate("results_window", "TextLabel"))

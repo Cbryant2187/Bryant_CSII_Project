@@ -10,39 +10,51 @@ class MainMenu(QMainWindow, Ui_Main_Window):
         method to create main menu with options to vote or view results
         """
         super().__init__()
+        self.main_menu = MainMenu
         self.voting_window = None
         self.setupUi(self)
         self.voterid_list = []
 
-        self.exit_option_button.clicked.connect(self.close)
+        self.exit_option_button.clicked.connect(self.open_results_window)
         self.vote_option_button.clicked.connect(self.open_voting_window)
 
     def open_voting_window(self) -> None:
         """
         method to open voting window
         """
-        self.voting_window = VotingWindow()
+        self.voting_window = VotingWindow(self)
         self.voting_window.show()
         self.hide()
 
 
+    def open_results_window(self) -> None:
+        """
+        method to open results window
+        """
+        self.results_window = ResultsWindow(self)
+        self.results_window.show()
+        self.hide()
+
+
 class VotingWindow(QMainWindow, Ui_input_voting_terminal):
-    def __init__(self) -> None:
+    def __init__(self, main_menu) -> None:
         """
         method to create voting/ ballet window with candidate options
+        :param main_menu: keeps status of main menu variables
         """
         super().__init__()
+        self.main_menu = main_menu
         self.setupUi(self)
         self.submit_button.clicked.connect(self.check_submission)
         self.custom_input.setVisible(False)
         self.radio_custom.toggled.connect(self.custom_input_box_visibility)
 
-    def custom_input_box_visibility(self, checked: bool) -> None:
+    def custom_input_box_visibility(self, status: bool) -> None:
         """
         method to change input box visibility
         :param checked: boolean value representing visibility
         """
-        self.custom_input.setVisible(checked)
+        self.custom_input.setVisible(status)
 
     def check_submission(self) -> str | None:
         """
@@ -52,8 +64,8 @@ class VotingWindow(QMainWindow, Ui_input_voting_terminal):
         self.error_candidate_name_label.setText("")
         self.error_candidate_name_label.setStyleSheet("color: black;")
         voterid_text = self.voterid_input.text().strip()
-        candidate = 0
-        custom_candidate = 0
+        candidate = None
+        custom_candidate = None
 
         if self.radio_can1.isChecked():
             candidate = 'Bianca'
@@ -64,7 +76,7 @@ class VotingWindow(QMainWindow, Ui_input_voting_terminal):
         elif self.radio_custom.isChecked():
             custom_candidate = self.custom_input.text()
             custom_candidate = self.validate_custom_candidate(custom_candidate)
-            if custom_candidate == 0:
+            if custom_candidate is None:
                 self.error_candidate_name_label.setStyleSheet("color: red;")
                 self.error_candidate_name_label.setText('error: enter valid name')
                 return
@@ -76,10 +88,16 @@ class VotingWindow(QMainWindow, Ui_input_voting_terminal):
 
         try:
 
-            voterid_text = int(voterid_text).strip()
-            if voterid_text < 10000 or voterid_text > 99999:
+            voterid_text = voterid_text.strip()
+            voterid_num = int(voterid_text)
+            if voterid_num < 10000 or voterid_num > 99999:
                 self.error_candidate_name_label.setStyleSheet("color: red;")
                 self.error_candidate_name_label.setText("Error: Voter ID must be 5 digits.")
+                return
+
+            if voterid_num in self.main_menu.voterid_list:
+                self.error_candidate_name_label.setStyleSheet("color: red;")
+                self.error_candidate_name_label.setText("Error: Voter ID has already voted.")
                 return
 
         except ValueError:
@@ -87,22 +105,24 @@ class VotingWindow(QMainWindow, Ui_input_voting_terminal):
             self.error_candidate_name_label.setText("Error: Voter ID must be a number.")
             return
 
-        if custom_candidate == 0 and candidate != 0:
+        if custom_candidate is None and candidate is not None:
             self.error_candidate_name_label.setText(f'Voter (ID:{voterid_text}) voted for {candidate}')
+            self.main_menu.voterid_list.append(voterid_num)
             self.ballot_exit()
-        elif custom_candidate == 0:
+        elif custom_candidate is None:
             self.error_candidate_name_label.setStyleSheet("color: red;")
             self.error_candidate_name_label.setText('error: enter valid name')
             return
         else:
             self.error_candidate_name_label.setText(f'Voter (ID:{voterid_text}) voted for {custom_candidate}')
+            self.main_menu.voterid_list.append(voterid_num)
             self.ballot_exit()
 
-    def validate_custom_candidate(self, name: str) -> str | int:
+    def validate_custom_candidate(self, name: str) -> str | None:
         """
         method validating custom candidate name
         :param name: input from custom candidate input box
-        :return: string of accepted name or 0 for error
+        :return: string of accepted name or None for error
         """
         try:
             str(name)
@@ -111,10 +131,10 @@ class VotingWindow(QMainWindow, Ui_input_voting_terminal):
                 return name
 
             else:
-                return 0
+                return None
 
         except ValueError:
-            return 0
+            return None
 
     def ballot_exit(self) -> None:
         """
@@ -128,11 +148,18 @@ class VotingWindow(QMainWindow, Ui_input_voting_terminal):
         method to return to main menu
         """
         self.close()
-        self.main_window = MainMenu()
-        self.main_window.show()
+        self.main_menu.show()
 
 
+class ResultsWindow(QMainWindow, Ui_results_window):
+    def __init__(self, main_menu) -> None:
+        """
+        method to create results window
+        :param main_menu: preserves main menu to keep status of voterid and count lists
+        """
+        super().__init__()
+        self.main_menu = main_menu
+        self.setupUi(self)
 
-
-
+        self.results_exit_button.clicked.connect(self.close)
 
